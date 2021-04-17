@@ -13,7 +13,7 @@ interface IHomeProps {
 }
 
 const Home = ({ product }: IHomeProps) => {
-  const { amount } = product
+  const { amount, priceId } = product
   return (
     <>
       <Head>
@@ -27,10 +27,10 @@ const Home = ({ product }: IHomeProps) => {
 
           <p>
             Get access to all the pblications<br />
-            <span>for { amount } month</span>
+            <span>for {amount} month</span>
           </p>
 
-          <SubscribeButton />
+          <SubscribeButton priceId={priceId} />
         </section>
 
         <img src='/images/avatar.svg' alt='Girl coding' />
@@ -48,7 +48,7 @@ export const getServerSideProps = async () => {
     priceId: price.id,
     amount: new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD', 
+      currency: 'USD',
     }).format(price.unit_amount / 100),
   }
 
