@@ -17,13 +17,11 @@ const SubscribeButton = ({ priceId }: ISubcribeButtonProps) => {
     }
 
     const stripe = await getStripeJS()
-    console.log('>>>>', stripe)
 
     try {
       const response = await api.post('/subscribe')
       const { sessionId } = response.data
       const stripe = await getStripeJS()
-      console.log('>>>>', stripe)
       await stripe.redirectToCheckout({ sessionId })
     } catch (error) {
       alert(error.message)

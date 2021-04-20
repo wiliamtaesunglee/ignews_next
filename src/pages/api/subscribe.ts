@@ -27,8 +27,6 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
       )
     )
 
-    console.warn(user.data)
-
     let customerId = user.data.stripe_customer_id
 
     if (!customerId) {
