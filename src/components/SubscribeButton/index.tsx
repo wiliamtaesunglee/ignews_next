@@ -16,8 +16,6 @@ const SubscribeButton = ({ priceId }: ISubcribeButtonProps) => {
       return
     }
 
-    const stripe = await getStripeJS()
-
     try {
       const response = await api.post('/subscribe')
       const { sessionId } = response.data
