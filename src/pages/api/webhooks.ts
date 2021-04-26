@@ -4,6 +4,11 @@ import Stripe from "stripe"
 import { stripe } from "../../services/stripe"
 import { saveSubscription } from "./_lib/manageSubscription"
 
+const EVENT_COMPLETED = 'checkout.session.completed'
+const EVENT_CREATED = 'customer.subscription.created'
+const EVENT_UPDATED = 'customer.subscription.updated'
+const EVENT_DELETED = 'customer.subscription.deleted'
+
 async function buffer(readable: Readable) {
   const chunks = []
 
@@ -22,9 +27,12 @@ export const config = {
   }
 }
 
-const handledEvent = 'checkout.session.completed'
-
-const relevantEvents = new Set([handledEvent])
+const relevantEvents = new Set([
+  EVENT_COMPLETED,
+  EVENT_CREATED,
+  EVENT_UPDATED,
+  EVENT_DELETED
+])
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -44,7 +52,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (relevantEvents.has(type)) {
       try {
         switch (type) {
-          case handledEvent: 
+          case EVENT_CREATED:
+          case EVENT_UPDATED:
+          case EVENT_DELETED:
+            const subscription = event.data.object as Stripe.Subscription
+
+            await saveSubscription(
+              subscription.id,
+              subscription.customer.toString(),
+              type === EVENT_CREATED,
+            )
+
+            break;
+          case EVENT_COMPLETED: 
             const checkoutSession = event.data.object as Stripe.Checkout.Session
 
             await saveSubscription(
