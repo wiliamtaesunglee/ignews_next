@@ -28,8 +28,6 @@ export const saveSubscription = async (
     price_id: subscription.items.data[0].price.id,
   }
 
-  console.warn(subscriptionData, '<<<<,')
-
   if (createdAction) {
     await fauna.query(
       query.Create(
