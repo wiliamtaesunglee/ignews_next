@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { getSession } from 'next-auth/client'
 import { RichText } from 'prismic-dom'
 import { getPrismiClient } from '../../services/prismic'
+import styles from './post.module.scss'
 
 interface PostProps {
   post: {
@@ -20,11 +21,12 @@ const Post = ({ post }: PostProps) => {
         <title>{post.title} | ignews</title>
       </Head>
 
-      <main>
-        <article>
+      <main className={styles.container}>
+        <article className={styles.post}>
           <h1>{post.title}</h1>
           <time>{post.updatedAt}</time>
           <div
+            className={styles.postContent}
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
@@ -48,7 +50,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
     updatedAt: new Date(response.last_publication_date).toLocaleTimeString('pt-BR', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     })
   }
 
