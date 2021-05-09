@@ -1,6 +1,6 @@
 import Prismic from '@prismicio/client'
 
-export const  getPrismicClient = (req?: unknown) => {
+export const  getPrismiClient = (req?: unknown) => {
   const prismic = Prismic.client(
     process.env.PRISMIC_URL,
     {
