@@ -1,4 +1,5 @@
 import { useSession, signIn } from 'next-auth/client'
+import { useRouter } from 'next/router'
 import { api } from '../../services/api'
 import { getStripeJS } from '../../services/stype-js'
 import styles from './styles.module.scss'
@@ -9,10 +10,16 @@ interface ISubcribeButtonProps {
 
 const SubscribeButton = ({ priceId }: ISubcribeButtonProps) => {
   const [session] = useSession()
+  const router = useRouter()
   
   const handleSubscribe = async () => {
     if (!session) {
       signIn('github')
+      return
+    }
+
+    if(session.activeSubscription) {
+      router.push('/posts');
       return
     }
 

@@ -39,6 +39,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   const session = await getSession({ req })
   const { slug } = params
 
+  if (!session?.activeSubscription) {
+    return {
+      redirect: {
+        destination: '/',
+        permandent: false,
+      }
+    }
+  }
+
   const prismic = getPrismiClient(req)
 
   const response = await prismic.getByUID('post_-_publicati', String(slug), {})
@@ -59,7 +68,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   return {
     props: {
       post
-    }
+    },
+    redirect: 60 * 30, // 30 minutos
   }
 }
 

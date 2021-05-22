@@ -27,8 +27,8 @@ const Posts = ({ posts }: PostsProps) => {
       <main className={styles.container}>
         <div className={styles.posts}>
           { posts.map(post => (
-            <Link href={`/posts/${post.slug}`} prefetch>
-            <a key={post.slug} >
+            <Link href={`/posts/${post.slug}`}  key={post.slug} >
+            <a>
               <time>{post.updatedAt}</time>
               <strong>{post.title}</strong>
               <p>{post.exerpt}</p>
@@ -51,8 +51,7 @@ export const getStaticProps: GetStaticProps = async () => {
       pageSize: 100,
     }
   )
-
-  console.log('>>', response)
+  
   const posts = response.results.map(post => {
     return {
       slug: post.uid,
